@@ -1,0 +1,68 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f2f4f7;
+    color: #333;
+}
+
+.cabecera {
+    background: #185a37;
+    color: white;
+    padding: 20px;
+    text-align: center;
+}
+
+nav a {
+    color: white;
+    margin: 0 10px;
+    text-decoration: none;
+}
+
+.contenedor {
+    max-width: 800px;
+    margin: 30px auto;
+    padding: 20px;
+}
+
+.tarjeta {
+    background: white;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px #00000015;
+}
+
+label {
+    display: block;
+    margin-top: 15px;
+}
+
+input,
+textarea {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+button,
+.boton {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 12px 18px;
+    background: #185a37;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.pie {
+    text-align: center;
+    padding: 20px;
+}
