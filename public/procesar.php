@@ -40,6 +40,26 @@ if (
     exit('Revisa los datos ingresados y vuelve a intentarlo.');
 }
 
+// Limitar a 3 envíos cada 10 minutos por sesión
+$ahora = time();
+
+if (!isset($_SESSION['envios_contacto'])) {
+    $_SESSION['envios_contacto'] = [];
+}
+
+// Conservar solo los envíos de los últimos 10 minutos
+$_SESSION['envios_contacto'] = array_filter(
+    $_SESSION['envios_contacto'],
+    function ($tiempo) use ($ahora) {
+        return $tiempo > $ahora - 600;
+    }
+);
+
+if (count($_SESSION['envios_contacto']) >= 3) {
+    http_response_code(429);
+    exit('Has enviado demasiados mensajes; espera unos minutos');
+}
+
 try {
     $pdo = conectarBD();
 
@@ -53,6 +73,9 @@ try {
         ':asunto'  => $asunto,
         ':mensaje' => $mensaje
     ]);
+
+    // Contar el envío solo después de guardarlo correctamente
+    $_SESSION['envios_contacto'][] = $ahora;
 
     unset($_SESSION['csrf_token']);
 
