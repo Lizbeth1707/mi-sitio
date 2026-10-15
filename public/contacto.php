@@ -1,8 +1,12 @@
+
 <?php
 require_once dirname(__DIR__) . '/includes/funciones.php';
 
 $titulo = 'Contacto';
 require_once dirname(__DIR__) . '/includes/header.php';
+
+$viejo = $_SESSION['viejo'] ?? [];
+unset($_SESSION['viejo']);
 ?>
 
 <section class="tarjeta">
@@ -12,6 +16,13 @@ require_once dirname(__DIR__) . '/includes/header.php';
         <input type="hidden" name="csrf_token"
                value="<?= e(generarToken()) ?>">
 
+        <!-- Honeypot para detectar bots -->
+        <div style="display: none;">
+            <label for="web">No completar este campo</label>
+            <input type="text" id="web" name="web"
+                   tabindex="-1" autocomplete="off">
+        </div>
+
         <label for="nombre">Nombre</label>
         <input type="text" id="nombre" name="nombre"
                maxlength="100" required>
@@ -20,13 +31,14 @@ require_once dirname(__DIR__) . '/includes/header.php';
         <input type="email" id="email" name="email"
                maxlength="150" required>
 
-       <label for="asunto">Asunto</label>
-       <input type="text" id="asunto" name="asunto" maxlength="150"
-       value="<?= e($viejo['asunto'] ?? '') ?>" required>
+        <label for="asunto">Asunto</label>
+        <input type="text" id="asunto" name="asunto"
+               maxlength="150"
+               value="<?= e($viejo['asunto'] ?? '') ?>" required>
 
         <label for="mensaje">Mensaje</label>
         <textarea id="mensaje" name="mensaje"
-                  rows="5" required></textarea>
+                  rows="5" required><?= e($viejo['mensaje'] ?? '') ?></textarea>
 
         <button type="submit">Enviar mensaje</button>
     </form>

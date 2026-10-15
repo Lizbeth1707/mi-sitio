@@ -1,3 +1,4 @@
+
 <?php
 
 require_once dirname(__DIR__) . '/includes/funciones.php';
@@ -13,16 +14,24 @@ if (!verificarToken($_POST['csrf_token'] ?? null)) {
     exit('Formulario inválido. Vuelve a intentarlo.');
 }
 
-$nombre  = trim((string) ($_POST['nombre']  ?? ''));
-$email   = trim((string) ($_POST['email']   ?? ''));
-$asunto  = trim((string) ($_POST['asunto']  ?? ''));
+// Honeypot: si está rellenado, no guardar el mensaje
+$web = trim((string) ($_POST['web'] ?? ''));
+
+if ($web !== '') {
+    header('Location: gracias.php');
+    exit;
+}
+
+$nombre  = trim((string) ($_POST['nombre'] ?? ''));
+$email   = trim((string) ($_POST['email'] ?? ''));
+$asunto  = trim((string) ($_POST['asunto'] ?? ''));
 $mensaje = trim((string) ($_POST['mensaje'] ?? ''));
 
 if (
     $nombre === '' ||
-    strlen($nombre) > 100 ||
+    mb_strlen($nombre) > 100 ||
     !filter_var($email, FILTER_VALIDATE_EMAIL) ||
-    strlen($email) > 150 ||
+    mb_strlen($email) > 150 ||
     $asunto === '' ||
     mb_strlen($asunto) > 150 ||
     $mensaje === ''
@@ -39,9 +48,9 @@ try {
 
     $stmt = $pdo->prepare($sql);
     $stmt->execute([
-        ':nombre' => $nombre,
-        ':email' => $email,
-        ':asunto' => $asunto,
+        ':nombre'  => $nombre,
+        ':email'   => $email,
+        ':asunto'  => $asunto,
         ':mensaje' => $mensaje
     ]);
 
