@@ -13,15 +13,18 @@ if (!verificarToken($_POST['csrf_token'] ?? null)) {
     exit('Formulario inválido. Vuelve a intentarlo.');
 }
 
-$nombre = trim($_POST['nombre'] ?? '');
-$email = trim($_POST['email'] ?? '');
-$mensaje = trim($_POST['mensaje'] ?? '');
+$nombre  = trim((string) ($_POST['nombre']  ?? ''));
+$email   = trim((string) ($_POST['email']   ?? ''));
+$asunto  = trim((string) ($_POST['asunto']  ?? ''));
+$mensaje = trim((string) ($_POST['mensaje'] ?? ''));
 
 if (
     $nombre === '' ||
     strlen($nombre) > 100 ||
     !filter_var($email, FILTER_VALIDATE_EMAIL) ||
     strlen($email) > 150 ||
+    $asunto === '' ||
+    mb_strlen($asunto) > 150 ||
     $mensaje === ''
 ) {
     http_response_code(422);
@@ -31,13 +34,14 @@ if (
 try {
     $pdo = conectarBD();
 
-    $sql = 'INSERT INTO mensajes (nombre, email, mensaje)
-            VALUES (:nombre, :email, :mensaje)';
+    $sql = 'INSERT INTO mensajes (nombre, email, asunto, mensaje)
+            VALUES (:nombre, :email, :asunto, :mensaje)';
 
     $stmt = $pdo->prepare($sql);
     $stmt->execute([
         ':nombre' => $nombre,
         ':email' => $email,
+        ':asunto' => $asunto,
         ':mensaje' => $mensaje
     ]);
 

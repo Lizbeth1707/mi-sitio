@@ -20,6 +20,10 @@ require_once dirname(__DIR__) . '/includes/header.php';
         <input type="email" id="email" name="email"
                maxlength="150" required>
 
+       <label for="asunto">Asunto</label>
+       <input type="text" id="asunto" name="asunto" maxlength="150"
+       value="<?= e($viejo['asunto'] ?? '') ?>" required>
+
         <label for="mensaje">Mensaje</label>
         <textarea id="mensaje" name="mensaje"
                   rows="5" required></textarea>
